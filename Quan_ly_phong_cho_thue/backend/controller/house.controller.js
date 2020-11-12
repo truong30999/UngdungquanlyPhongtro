@@ -1,4 +1,4 @@
-const House = require('../models/House')
+const House = require('../models/House.model')
 
 exports.createHouse = async (req, res) => {
     const house = new House({

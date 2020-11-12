@@ -11,9 +11,9 @@ app.use(bodyParser.json());
 
 
 //import router
-const userRouter = require('./routes/user.js');
-const roomRouter = require('./routes/room.js')
-const houseRouter = require('./routes/house.js')
+const userRouter = require('./routes/user.routes.js');
+const roomRouter = require('./routes/room.routes.js')
+const houseRouter = require('./routes/house.routes.js')
 
 
 app.use("/user", userRouter);

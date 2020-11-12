@@ -1,5 +1,5 @@
-const Room = require('../models/Room')
-const House = require('../models/House')
+const Room = require('../models/Room.model')
+const House = require('../models/House.model')
 
 exports.createRoom = async (req,res)=>{
     const room = new Room({
@@ -17,7 +17,7 @@ exports.createRoom = async (req,res)=>{
         const house= await House.findById({_id : req.body.HouseId})
         house.Rooms.push(room)
         await house.save()
-        res.json(createRoom);
+        res.json(createRoom)
     }catch(err){
         res.json({message: err})
     }

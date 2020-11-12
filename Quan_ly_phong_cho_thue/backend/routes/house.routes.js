@@ -1,6 +1,6 @@
 const express =  require('express')
 const router = express.Router()
-const House = require('../controller/houseController')
+const House = require('../controller/house.controller')
 
 router.post('/',House.createHouse)
 router.get('/',House.getAllHouse)

@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const Room = require('../controller/roomController')
+const Room = require('../controller/room.controller')
 
 router.post('/', Room.createRoom)
 router.patch('/:roomId', Room.updateRoom)
