@@ -1,6 +1,6 @@
 const User = require('../models/User.model')
 const crypto = require('crypto');
-exports.createUser = async (req, res) => {
+exports.createUser = async (req, res, next) => {
     let salt = crypto.randomBytes(16).toString('base64');
     let hash = crypto.createHmac('sha512', salt)
         .update(req.body.PassWord)
@@ -9,11 +9,24 @@ exports.createUser = async (req, res) => {
     req.body.Type = 1;
     
     try {
-        const user = new User(req.body)
+        const user = new User({
+            Name : req.body.Name,
+            Image : req.file.path, 
+            Age : req.body.Age,
+            Email: req.body.Email,
+            Phone: req.body.Phone,
+            PassWord: req.body.PassWord,
+            Type: req.body.Type
+        })
         const result = await user.save()
         res.json(result)
     } catch (err) {
         res.json({ message: err.message })
+        const error = new HttpError(
+            'Signing up failed, please try again later.',
+            500
+          );
+          return next(error);
     }
 
 }

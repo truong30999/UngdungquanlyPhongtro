@@ -15,6 +15,10 @@ const userSchema = mongoose.Schema({
     Phone:{
         type: String
     },
+    Image : { 
+        type: String,
+        
+    },
     PassWord: {
         type: String,
         require: true
