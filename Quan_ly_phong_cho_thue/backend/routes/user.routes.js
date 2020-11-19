@@ -5,10 +5,10 @@ const auth = require('../controller/auth.controller.js')
 const fileUpload = require('../middleware/file-upload.js')
 
 
-router.get('/',auth.validJWTNeeded, auth.minimumPermissionLevelRequired(1), user.getAllUser)
+router.get('/', user.getAllUser)
 router.post('/',fileUpload.single('Image'), user.createUser)
 router.get('/:userId', user.getUserById)
-router.patch('/:userId', user.updateUser)
+router.patch('/:userId',fileUpload.single('Image'), user.updateUser)
 router.delete('/:userId', user.deleteUser)
 
 

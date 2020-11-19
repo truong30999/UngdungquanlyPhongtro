@@ -1,5 +1,6 @@
 const User = require('../models/User.model')
-const crypto = require('crypto');
+const crypto = require('crypto')
+const fs = require('fs');
 exports.createUser = async (req, res, next) => {
     let salt = crypto.randomBytes(16).toString('base64');
     let hash = crypto.createHmac('sha512', salt)
@@ -54,11 +55,22 @@ exports.updateUser = async (req, res) => {
         let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest("base64");
         req.body.password = salt + "$" + hash;
         }
-    try {
+        const user = await User.findById( req.params.userId)
+        if (user.Image && req.file) {
+            fs.unlink(user.Image, err => {
+                console.log(err.message);
+            });
+        }
+    
+        if(req.file)
+        { req.body.Image = req.file.path}
         let update = req.body;
+    try {
+        
         const updatedUser = await User.updateOne(
             { _id: req.params.userId },
             { $set: update }
+            
         );
         res.json(updatedUser);
     } catch (err) {
@@ -67,6 +79,13 @@ exports.updateUser = async (req, res) => {
 
 }
 exports.deleteUser = async (req, res) => {
+    const user = await User.findById( req.params.userId)
+    if(user.Image)
+    {
+        fs.unlink(user.Image, err => {
+            console.log(err);
+          });
+    }
     try {
         const removeUser = await User.remove({ _id: req.params.userId })
         res.json(removeUser)
