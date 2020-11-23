@@ -3,14 +3,14 @@ const mongoose = require('mongoose');
 const userSchema = mongoose.Schema({
 
     Name: {
-        type: String,
-        require: true
+        type: String
     },
     Age:{
         type: Number
     },
     Email: {
-        type: String
+        type: String,
+        require: true
     },
     Phone:{
         type: String
@@ -26,7 +26,11 @@ const userSchema = mongoose.Schema({
     Type: {
         type: Number,
         require: true
-    }
+    },
+    House:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "House"
+    }],
     
 });
 

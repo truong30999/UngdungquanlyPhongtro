@@ -6,7 +6,11 @@ const houseSchema = mongoose.Schema({
     Rooms:[{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Room"
-    }]
+    }],
+    UserId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Users"
+    }
 });
 
 module.exports= mongoose.model("House", houseSchema);

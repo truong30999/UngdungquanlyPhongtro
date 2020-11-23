@@ -11,13 +11,13 @@ exports.isPasswordAndUserMatch = (req, res, next) => {
             } else {
                 let passwordFields = user.PassWord.split('$');
                 let salt = passwordFields[0];
-                let hash = crypto.createHmac('sha512', salt).update(req.body.PassWord).digest("base64");
+                let hash = crypto.createHmac('sha512', salt).update(String(req.body.PassWord)).digest("base64");
                 if (hash === passwordFields[1]) {
                     req.body = {
                         userId: user._id,
                         email: user.Email,
                         permissionLevel: user.Type,
-                        provider: 'email'
+                       
 
                     };
                     return next();
@@ -33,10 +33,10 @@ exports.login = (req, res) => {
         let salt = crypto.randomBytes(16).toString('base64');
         let hash = crypto.createHmac('sha512', salt).update(refreshId).digest("base64");
         req.body.refreshKey = salt;
-        let token = jwt.sign(req.body, config.jwtSecret);
+        let token = jwt.sign(req.body, config.jwtSecret,{ expiresIn : '1h'});
         let b = new Buffer(hash);
         let refresh_token = b.toString('base64');
-        res.status(201).send({ accessToken: token, refreshToken: refresh_token });
+        res.json({userId: req.body.userId, Email: req.body.email ,accessToken: token, refreshToken: refresh_token });
     } catch (err) {
         res.status(500).send({ errors: err });
     }
@@ -65,7 +65,7 @@ exports.hasAuthValidFields = (req, res, next) => {
 exports.validJWTNeeded = (req, res, next) => {
     if (req.headers['authorization']) {
         try {
-            let authorization = req.headers['authorization'].split(' ');
+            let authorization = req.headers.authorization.split(' ');
             if (authorization[0] !== 'Bearer') {
                 return res.status(401).send({ errors : "no header 1" });
             } else {
@@ -80,10 +80,9 @@ exports.validJWTNeeded = (req, res, next) => {
     }
 };
 
-
 exports.minimumPermissionLevelRequired = (required_permission_level) => {
     return (req, res, next) => {
-        let user_permission_level = parseInt(req.jwt.permission_level);
+        let user_permission_level = parseInt(req.jwt.permissionLevel);
         let user_id = req.jwt.user_id;
         if (user_permission_level & required_permission_level) {
             return next();

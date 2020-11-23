@@ -4,7 +4,8 @@ exports.createHouse = async (req, res) => {
     const house = new House({
         Name: req.body.Name,
         Address: req.body.Address,
-        Room: req.body.Room
+        Room: req.body.Room,
+        UserId: req.body.UserId
     })
     try {
        
@@ -53,4 +54,5 @@ exports.deleteHouse = async (req,res) =>{
         res.json({message: err})
     }
 }
+
 

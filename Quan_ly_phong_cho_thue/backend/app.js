@@ -10,13 +10,22 @@ const path = require('path');
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
-
+app.use((req, res, next) => {
+  
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Authorization'
+  );
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
+  next();
+});
 //import router
 const userRouter = require('./routes/user.routes.js');
 const roomRouter = require('./routes/room.routes.js')
 const houseRouter = require('./routes/house.routes.js')
 const authRouter = require('./routes/auth.routes.js')
 const customerRouter = require('./routes/customer.routes.js')
+const utilityBillRouter =  require('./routes/utilitybills.routes.js')
 //kiểm tra loi file
 app.use((error, req, res, next) => {
     if (req.file) {
@@ -36,7 +45,7 @@ app.use("/room", roomRouter);
 app.use("/house", houseRouter);
 app.use("/auth", authRouter);
 app.use("/customer", customerRouter)
-
+app.use("/utilitybills", utilityBillRouter)
 //routes
 app.get('/',(req,res) => {
     res.send('we are on home');
