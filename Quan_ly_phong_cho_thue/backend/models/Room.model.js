@@ -25,7 +25,16 @@ const roomSchema = mongoose.Schema({
     },
     Image: {
         type: String
-    }
+    },
+    ListPerson: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"Customers"
+    }],
+    ListService:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"Service"
+    }],
+    Status:{ type: Number,require: true}
 });
 
 module.exports= mongoose.model("Room", roomSchema);

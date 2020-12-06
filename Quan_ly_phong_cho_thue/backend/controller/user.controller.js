@@ -1,4 +1,5 @@
 const User = require('../models/User.model')
+const Service = require('../models/Services.model')
 const crypto = require('crypto')
 const fs = require('fs');
 exports.createUser = async (req, res, next) => {
@@ -20,6 +21,7 @@ exports.createUser = async (req, res, next) => {
             Type: req.body.Type
         })
         const result = await user.save()
+        createService(result["_id"])
         res.json(result)
     } catch (err) {
         res.json({ message: err.message })
@@ -93,4 +95,38 @@ exports.deleteUser = async (req, res) => {
     } catch (err) {
         res.json({ message: err })
     }
+}
+exports.register = async (req, res) =>{
+    try {
+        
+
+    } catch (error) {
+        res.json({message: error.message})
+    }
+}
+
+
+
+const createService = async (userId)=>{
+    const service1 = new Service({
+        ServiceName: "Điện",
+        Description: "Tiền điện",
+        Price: 3000,
+        UserId: userId
+    })
+    const service2 = new Service({
+        ServiceName: "Nước",
+        Description: "Tiền Nước",
+        Price: 10000,
+        UserId: userId
+    })
+    const service3 = new Service({
+        ServiceName: "Rác",
+        Description: "Tiền rác hàng tháng",
+        Price: 3000,
+        UserId: userId
+    })
+    await service1.save()
+    await service2.save()
+    await service3.save()
 }

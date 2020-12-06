@@ -19,6 +19,19 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
   next();
 });
+//kiểm tra loi file
+app.use((error, req, res, next) => {
+  if (req.file) {
+    fs.unlink(req.file.path, err => {
+      console.log(err);
+    });
+  }
+  if (res.headerSent) {
+    return next(error);
+  }
+  res.status(error.code || 500);
+  res.json({ message: error.message || 'An unknown error occurred!' });
+});
 //import router
 const userRouter = require('./routes/user.routes.js');
 const roomRouter = require('./routes/room.routes.js')
@@ -26,19 +39,9 @@ const houseRouter = require('./routes/house.routes.js')
 const authRouter = require('./routes/auth.routes.js')
 const customerRouter = require('./routes/customer.routes.js')
 const utilityBillRouter =  require('./routes/utilitybills.routes.js')
-//kiểm tra loi file
-app.use((error, req, res, next) => {
-    if (req.file) {
-      fs.unlink(req.file.path, err => {
-        console.log(err);
-      });
-    }
-    if (res.headerSent) {
-      return next(error);
-    }
-    res.status(error.code || 500);
-    res.json({ message: error.message || 'An unknown error occurred!' });
-  });
+const serviceRouter = require('./routes/services.routes.js')
+const billRouter = require('./routes/bill.routes')
+
 app.use('/uploads/images', express.static(path.join('uploads', 'images')))
 app.use("/user", userRouter);
 app.use("/room", roomRouter);
@@ -46,13 +49,15 @@ app.use("/house", houseRouter);
 app.use("/auth", authRouter);
 app.use("/customer", customerRouter)
 app.use("/utilitybills", utilityBillRouter)
+app.use("/service", serviceRouter)
+app.use("/bill",billRouter)
 //routes
 app.get('/',(req,res) => {
     res.send('we are on home');
 });
 //connect to db
 
-mongoose.connect('mongodb://localhost:27017/test1',{ useNewUrlParser: true }, () => console.log("connect to db success"));
+mongoose.connect('mongodb://localhost:27017/test1',{ useNewUrlParser: true ,useUnifiedTopology: true }, () => console.log("connect to db success"));
 
 // Launch app to the specified port
 app.listen(config.port);

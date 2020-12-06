@@ -18,11 +18,6 @@ exports.createCustomer = async (req, res, next) => {
         res.json(result)
     } catch (err) {
         res.json({ message: err.message })
-        const error = new HttpError(
-            'Signing up failed, please try again later.',
-            500
-        );
-        return next(error);
     }
 
 }
