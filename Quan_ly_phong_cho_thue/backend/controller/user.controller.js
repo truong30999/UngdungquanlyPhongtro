@@ -9,12 +9,12 @@ exports.createUser = async (req, res, next) => {
         .digest("base64");
     req.body.PassWord = salt + "$" + hash;
     req.body.Type = 1;
-    
+
     try {
         const user = new User({
-            Name : req.body.Name,
-            Image : req.file.path, 
-            Age : req.body.Age,
+            Name: req.body.Name,
+            Image: req.file.path,
+            Age: req.body.Age,
             Email: req.body.Email,
             Phone: req.body.Phone,
             PassWord: req.body.PassWord,
@@ -28,8 +28,8 @@ exports.createUser = async (req, res, next) => {
         const error = new HttpError(
             'Signing up failed, please try again later.',
             500
-          );
-          return next(error);
+        );
+        return next(error);
     }
 
 }
@@ -52,27 +52,26 @@ exports.getUserById = async (req, res) => {
     }
 }
 exports.updateUser = async (req, res) => {
-    if (req.body.password){
+    if (req.body.password) {
         let salt = crypto.randomBytes(16).toString('base64');
         let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest("base64");
         req.body.password = salt + "$" + hash;
-        }
-        const user = await User.findById( req.params.userId)
-        if (user.Image && req.file) {
-            fs.unlink(user.Image, err => {
-                console.log(err.message);
-            });
-        }
-    
-        if(req.file)
-        { req.body.Image = req.file.path}
-        let update = req.body;
+    }
+    const user = await User.findById(req.params.userId)
+    if (user.Image && req.file) {
+        fs.unlink(user.Image, err => {
+            console.log(err.message);
+        });
+    }
+
+    if (req.file) { req.body.Image = req.file.path }
+    let update = req.body;
     try {
-        
+
         const updatedUser = await User.updateOne(
             { _id: req.params.userId },
             { $set: update }
-            
+
         );
         res.json(updatedUser);
     } catch (err) {
@@ -81,12 +80,11 @@ exports.updateUser = async (req, res) => {
 
 }
 exports.deleteUser = async (req, res) => {
-    const user = await User.findById( req.params.userId)
-    if(user.Image)
-    {
+    const user = await User.findById(req.params.userId)
+    if (user.Image) {
         fs.unlink(user.Image, err => {
             console.log(err);
-          });
+        });
     }
     try {
         const removeUser = await User.remove({ _id: req.params.userId })
@@ -96,18 +94,18 @@ exports.deleteUser = async (req, res) => {
         res.json({ message: err })
     }
 }
-exports.register = async (req, res) =>{
+exports.register = async (req, res) => {
     try {
         
 
     } catch (error) {
-        res.json({message: error.message})
+        res.json({ message: error.message })
     }
 }
 
 
 
-const createService = async (userId)=>{
+const createService = async (userId) => {
     const service1 = new Service({
         ServiceName: "Điện",
         Description: "Tiền điện",

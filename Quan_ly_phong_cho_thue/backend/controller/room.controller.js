@@ -75,6 +75,7 @@ exports.deleteRoom = async (req, res) => {
         res.json({ message: err })
     }
 }
+//them mot nguoi vao phong
 exports.addPersonToRoom = async (req, res) => {
     try {
         const room = await Room.findById(req.params.roomId)
@@ -83,5 +84,87 @@ exports.addPersonToRoom = async (req, res) => {
         res.json(result)
     } catch (error) {
         res.json({ message: error.message })
+    }
+}
+//xoa mot nguoi khoi phong
+exports.removePersonToRoom = async (req, res) => {
+    try {
+        const room = await Room.findById(req.params.roomId)
+        const pos =  room.ListPerson.indexOf(req.params.customerId)
+        room.ListPerson.splice(pos, 1)
+        const result = await room.save()
+        res.json(result)
+    } catch (error) {
+        res.json({ message: error.message })
+    }
+}
+//them mot dich vu vao phong
+exports.addServiceToRoom = async (req, res) => {
+    try {
+        const room = await Room.findById(req.params.roomId)
+        room.ListService.push(req.params.serviceId)
+        const result = await room.save()
+        res.json(result)
+    } catch (error) {
+        res.json({ message: error.message })
+    }
+}
+//xoa mot nguoi khoi phong
+exports.removeServiceToRoom = async (req, res) => {
+    try {
+        const room = await Room.findById(req.params.roomId)
+        const pos =  room.ListService.indexOf(req.params.serviceId)
+        room.ListService.splice(pos, 1)
+        const result = await room.save()
+        res.json(result)
+    } catch (error) {
+        res.json({ message: error.message })
+    }
+}
+
+//lay tat ca nguoi trong phong
+exports.getPersonInRoom = async(req,res)=>{
+    try {
+        const room = await Room.findOne({_id : req.params.roomId}).populate("ListPerson")
+        const person = room["ListPerson"]
+        res.json(person)
+
+
+    } catch (error) {
+        res.json({message: error.message})
+    }
+}
+//lay tat ca dich vu cua phong
+exports.getServideOfRoom = async(req,res)=>{
+    try {
+        const room = await Room.findOne({_id : req.params.roomId}).populate("ListService")
+        const service = room["ListService"]
+        res.json(service)
+
+
+    } catch (error) {
+        res.json({message: error.message})
+    }
+}
+exports.getEmptyRoom = async(req,res)=>{
+    try {
+        const room = await Room.find({ Status : 1})
+        
+        res.json(room)
+
+
+    } catch (error) {
+        res.json({message: error.message})
+    }
+}
+exports.getNotEmptyRoom = async(req,res)=>{
+    try {
+        const room = await Room.find({ Status : 0})
+        
+        res.json(room)
+
+
+    } catch (error) {
+        res.json({message: error.message})
     }
 }

@@ -119,6 +119,7 @@ exports.getAllBill = async (req, res) => {
     }
 
 }
+
 const isSameMonthYear = (a, b) => {
     return a.getFullYear() === b.getFullYear() &&
         a.getMonth() === b.getMonth()

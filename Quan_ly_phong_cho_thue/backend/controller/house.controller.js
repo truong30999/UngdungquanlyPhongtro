@@ -19,7 +19,7 @@ exports.createHouse = async (req, res) => {
 
 exports.getAllHouse = async (req, res) =>{
     try{
-        const allHouse = await House.find().populate("Rooms")
+        const allHouse = await House.find()
         res.json(allHouse)
     }catch(err){
         res.json({message: err})
