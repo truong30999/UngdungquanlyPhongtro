@@ -31,7 +31,13 @@ const userSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "House"
     }],
-    
+    ActiveCode:{
+        type:Number
+    },
+    Status:{
+        type: Number,
+        require: true
+    }
 });
 
 module.exports= mongoose.model("Users", userSchema);

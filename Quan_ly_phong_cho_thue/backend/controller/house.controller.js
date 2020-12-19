@@ -1,4 +1,7 @@
 const House = require('../models/House.model')
+const User = require('../models/User.model')
+
+
 
 exports.createHouse = async (req, res) => {
     const house = new House({
@@ -10,16 +13,27 @@ exports.createHouse = async (req, res) => {
     try {
        
         const createHouse = await house.save()
+        const user = await User.findById({_id: house.UserId})
+        user.House.push(createHouse["_id"])
+        await user.save()
         res.json(createHouse)
     }catch(err)
     {
-        res.json({message: err})
+        res.json({message: err.message})
     }
 }
 
 exports.getAllHouse = async (req, res) =>{
     try{
         const allHouse = await House.find()
+        res.json(allHouse)
+    }catch(err){
+        res.json({message: err})
+    }
+}
+exports.getAllHouseOfUser= async (req,res)=>{
+    try{
+        const allHouse = await House.find({UserId: req.jwt.userId})
         res.json(allHouse)
     }catch(err){
         res.json({message: err})

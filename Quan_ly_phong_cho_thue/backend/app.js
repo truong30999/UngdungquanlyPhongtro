@@ -6,9 +6,9 @@ const config = require("./config/config")
 const fs = require('fs');
 const path = require('path');
 //Start App
-
+const User = require("./models/User.model")
 const app = express();
-app.use(cors());
+//app.use(cors());
 app.use(bodyParser.json());
 app.use((req, res, next) => {
   
@@ -16,7 +16,10 @@ app.use((req, res, next) => {
     'Access-Control-Allow-Headers',
     'Authorization'
   );
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Methods', 'GET,PATCH,POST,DELETE');
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
 //kiểm tra loi file
@@ -41,7 +44,7 @@ const customerRouter = require('./routes/customer.routes.js')
 const utilityBillRouter =  require('./routes/utilitybills.routes.js')
 const serviceRouter = require('./routes/services.routes.js')
 const billRouter = require('./routes/bill.routes')
-
+const registerRouter = require('./routes/register.routes')
 app.use('/uploads/images', express.static(path.join('uploads', 'images')))
 app.use("/user", userRouter);
 app.use("/room", roomRouter);
@@ -51,7 +54,25 @@ app.use("/customer", customerRouter)
 app.use("/utilitybills", utilityBillRouter)
 app.use("/service", serviceRouter)
 app.use("/bill",billRouter)
+app.use("/register",registerRouter)
 //routes
+
+app.use("/verify",  async (req,res)  =>  {
+      try {
+        const checkuser = await User.findOne({Email : req.query.email, ActiveCode: req.query.activeId})
+        if(checkuser)
+        {
+          checkuser.Status = 1;
+          await checkuser.save();
+        }
+        else{
+          res.json("Fail verify!")
+        }
+
+      } catch (error) {
+        res.json({message: error.message})
+      }
+})
 app.get('/',(req,res) => {
     res.send('we are on home');
 });
