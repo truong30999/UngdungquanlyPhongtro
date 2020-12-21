@@ -12,14 +12,11 @@ const app = express();
 app.use(bodyParser.json());
 app.use((req, res, next) => {
   
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'Authorization'
-  );
+ 
   res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.header('Access-Control-Allow-Credentials', true);
-    res.header('Access-Control-Allow-Methods', 'GET,PATCH,POST,DELETE');
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header('Access-Control-Allow-Methods', 'GET,PATCH,POST,DELETE,OPTIONS');
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   next();
 });
 //kiểm tra loi file
@@ -64,6 +61,7 @@ app.use("/verify",  async (req,res)  =>  {
         {
           checkuser.Status = 1;
           await checkuser.save();
+          return res.redirect("http://localhost:3000/verify")
         }
         else{
           res.json("Fail verify!")

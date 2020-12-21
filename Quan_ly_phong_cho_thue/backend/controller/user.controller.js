@@ -101,7 +101,19 @@ exports.getUserById = async (req, res) => {
         const user = await User.findById(req.params.userId);
         res.json(user);
     } catch (err) {
-        res.json({ message: err });
+        res.json({ message: err.message });
+    }
+}
+exports.getUserAuth = async (req, res) => {
+    try {
+        const user = await User.findById(req.jwt.userId);
+        res.json({
+            Id: user._id,
+            Name : user.Name,
+            Email: user.Email
+        });
+    } catch (err) {
+        res.json({ message: err.message });
     }
 }
 exports.updateUser = async (req, res) => {
