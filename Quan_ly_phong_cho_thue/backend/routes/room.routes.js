@@ -9,6 +9,8 @@ router.get('/notemptyRoom', Room.getNotEmptyRoom)
 
 router.get('/:roomId', Room.getRoomById)
 
+router.get('/house/:houseId',Room.getRoomByHouse)
+
 router.get('/person/:roomId', Room.getPersonInRoom)
 
 router.get('/service/:roomId', Room.getServideOfRoom)

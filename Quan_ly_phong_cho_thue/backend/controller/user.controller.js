@@ -25,7 +25,7 @@ exports.createUser = async (req, res, next) => {
             Status: 1
         })
         const result = await user.save()
-        createService(result["_id"])
+        this.createService(result["_id"])
         res.json(result)
     } catch (err) {
         res.json({ message: err.message })
@@ -159,7 +159,7 @@ exports.deleteUser = async (req, res) => {
         res.json({ message: err })
     }
 }
-const createService = async (userId) => {
+exports.createService = async (userId) => {
     const service1 = new Service({
         ServiceName: "Điện",
         Description: "Tiền điện",

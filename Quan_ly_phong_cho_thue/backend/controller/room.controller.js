@@ -1,8 +1,6 @@
 const Room = require('../models/Room.model')
 const House = require('../models/House.model')
 const Service = require('../models/Services.model')
-const jwt = require('jsonwebtoken')
-const { json } = require('body-parser')
 const mongoose = require('mongoose')
 
 
@@ -55,6 +53,17 @@ exports.getAllRoom = async (req, res) => {
     } catch (err) {
         res.json({ message: err })
     }
+
+}
+
+exports.getRoomByHouse= async (req, res)=>{
+    try {
+        const room = await Room.find({HouseId:req.params.houseId})
+        res.json(room)
+    } catch (err) {
+        res.json({ message: err })
+    }
+
 
 }
 exports.getRoomById = async (req, res) => {
