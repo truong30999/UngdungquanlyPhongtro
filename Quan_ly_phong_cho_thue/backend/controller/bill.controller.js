@@ -90,7 +90,11 @@ exports.updateBill = async (req, res) => {
 }
 exports.deleteBill = async (req, res) => {
     try {
-
+        const bill = await Bill.findById(req.params.billId)
+        const room = await Room.findById(bill.RoomId)
+        const pos =  room.ListBill.indexOf(req.params.billId)
+        room.ListBill.splice(pos,1)
+        room.save()
         const deleteBill = await Bill.remove({ _id: req.params.billId })
         res.json(deleteBill)
     } catch (error) {

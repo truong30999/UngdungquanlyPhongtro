@@ -78,7 +78,13 @@ exports.getRoomById = async (req, res) => {
 }
 exports.deleteRoom = async (req, res) => {
     try {
+        const room = await Room.findById(req.params.roomId)
+        const house = await House.findById(room.HouseId)
+        const pos =  house.Rooms.indexOf(req.params.roomId)
+        house.Rooms.splice(pos,1)
+        house.save()
         const removeRoom = await Room.remove({ _id: req.params.roomId })
+
         res.json(removeRoom)
     }
     catch (err) {
@@ -168,20 +174,20 @@ exports.getServideOfRoom = async(req,res)=>{
     }
 }
 
-exports.getUtilityBillOfRoom = async(req, res)=>{
-    try {
-        const house = await House.findOne({_id : req.params.houseId}).populate({
-            path: 'Rooms',
-            populate: { path: '' }
-          });
-        res.json(service)
+// exports.getUtilityBillOfRoom = async(req, res)=>{
+//     try {
+//         const house = await House.findOne({_id : req.params.houseId}).populate({
+//             path: 'Rooms',
+//             populate: { path: '' }
+//           });
+//         res.json(service)
 
 
-    } catch (error) {
-        res.json({message: error.message})
-    }
+//     } catch (error) {
+//         res.json({message: error.message})
+//     }
 
-}
+// }
 
 exports.getEmptyRoom = async(req,res)=>{
     try {

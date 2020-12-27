@@ -1,5 +1,7 @@
 const UtilityBill = require('../models/Utilitybills.model')
 const Room = require('../models/Room.model')
+const House = require('../models/House.model')
+const today = new Date()
 exports.createUtilityBills = async(req, res) => {
     try{
         
@@ -40,7 +42,7 @@ exports.getAllUtilityByRoom = async (req, res) =>{
             const list = await House.find({UserId: req.query.UserId, _id: req.query.HouseId})
             .populate({
                 path: 'Rooms',
-                populate: { path: 'ListBill', match: { StartDate: req.query.Month }
+                populate: { path: 'ListUtilityBill', match: { Time: req.query.Month }
               }})
               return   res.json(list)
         }
@@ -48,9 +50,9 @@ exports.getAllUtilityByRoom = async (req, res) =>{
             const list = await House.find({ _id: req.query.HouseId , UserId: req.query.UserId})
             .populate({
                 path: 'Rooms',
-                populate: { path: 'ListBill', match: { StartDate: month }
+                populate: { path: 'ListUtilityBill', match: { Time: month }
               }})
-            console.log(list)
+      
             res.json(list)
         
       
@@ -82,7 +84,13 @@ exports.update = async (req, res) =>{
 }
 exports.delete = async (req, res) => {
     try{
+        const utl = await UtilityBill.findById(req.params.Id)
+        const room = await Room.findById(utl.RoomId)
+        const pos =  room.ListUtilityBill.indexOf(req.params.Id)
+        room.ListUtilityBill.splice(pos,1)
+        room.save()
         const result =  await UtilityBill.remove({ _id:req.params.Id})
+
         res.json(result)
     }catch (err) {
         res.json({ message: err.message})
