@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 const Room = require('../controller/room.controller')
 const auth = require('../controller/auth.controller')
+const fileUpload = require('../middleware/file-upload.js')
+
 
 router.get('/', Room.getAllRoom)
 router.get('/emptyRoom', Room.getEmptyRoom)
@@ -15,7 +17,7 @@ router.get('/person/:roomId', Room.getPersonInRoom)
 
 router.get('/service/:roomId', Room.getServideOfRoom)
 
-router.post('/',auth.validJWTNeeded, Room.createRoom)
+router.post('/',auth.validJWTNeeded,fileUpload.single('Image'), Room.createRoom)
 
 router.patch('/:roomId/addService/:serviceId',Room.addServiceToRoom)
 

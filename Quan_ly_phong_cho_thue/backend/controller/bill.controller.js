@@ -118,14 +118,14 @@ exports.getBillInMonth = async (req, res) => {
     }
 }
 exports.getBillInMonthOfUser = async (req, res) => {
-    console.log(req.query)
+
     try {
-        if(req.body.Month)
+        if(req.query.Month)
         {
             const list = await House.find({UserId: req.query.UserId, _id: req.query.HouseId})
             .populate({
                 path: 'Rooms',
-                populate: { path: 'ListBill', match: { StartDate: req.body.Month }
+                populate: { path: 'ListBill', match: { StartDate: req.query.Month }
               }})
               return   res.json(list)
         }

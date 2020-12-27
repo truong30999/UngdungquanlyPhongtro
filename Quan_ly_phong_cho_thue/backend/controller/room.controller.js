@@ -88,7 +88,12 @@ exports.deleteRoom = async (req, res) => {
 exports.addPersonToRoom = async (req, res) => {
     try {
         const room = await Room.findById(req.params.roomId)
+        if(room.ListPerson.Length === 0 )
+        {
+            room.Status = 1
+        }
         room.ListPerson.push(req.params.customerId)
+
         const result = await room.save()
         res.json(result)
     } catch (error) {

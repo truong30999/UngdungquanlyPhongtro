@@ -10,8 +10,11 @@ exports.createUtilityBills = async(req, res) => {
         RoomId : req.body.RoomId
     })
     const result = await ult.save()
+    const room = await Room.findById(req.body.RoomId)
+    room.ListUtilityBill.push(result[_id])
+    room.save()
     res.json(result)
-
+        
 
     }
     catch (err) { 
@@ -31,33 +34,29 @@ exports.getAllUtilityBills = async (req, res) =>{
 
 }
 exports.getAllUtilityByRoom = async (req, res) =>{
-    try{
-        //const ult = await UtilityBill.find({RoomId : req.query.roomId})
-        console.log(req.query.RoomId)
-        const ult = await UtilityBill.aggregate([
-            {
-                $match: { 
-                    RoomId: req.query.RoomId
-                } 
-            },
-            // {
-            //     $lookup:{
-            //         from: 'rooms',
-            //         localField: 'RoomId',
-            //         foreignField: '_id',
-            //         as: 'abc'
-                    
-            //     }
-            // }
-        ])
-        console.log(ult)
+    try {
+        if(req.query.Month)
+        {
+            const list = await House.find({UserId: req.query.UserId, _id: req.query.HouseId})
+            .populate({
+                path: 'Rooms',
+                populate: { path: 'ListBill', match: { StartDate: req.query.Month }
+              }})
+              return   res.json(list)
+        }
+            const month = new Date(today.getFullYear(), today.getMonth())
+            const list = await House.find({ _id: req.query.HouseId , UserId: req.query.UserId})
+            .populate({
+                path: 'Rooms',
+                populate: { path: 'ListBill', match: { StartDate: month }
+              }})
+            console.log(list)
+            res.json(list)
         
-        res.json(ult)
-
-    }catch (err) {
-        res.json({ message: err})
+      
+    } catch (error) {
+        res.json({ message: error.message })
     }
-
 }
 exports.getById = async (req, res) => {
     try{

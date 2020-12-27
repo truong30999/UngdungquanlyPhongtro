@@ -34,6 +34,10 @@ const roomSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref:"Service"
     }],
+    ListUtilityBill:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"UtilityBill"
+    }],
     ListBill:[{
         type: mongoose.Schema.Types.ObjectId,
         ref:"Bill"
