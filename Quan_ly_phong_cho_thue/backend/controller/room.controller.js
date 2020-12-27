@@ -1,6 +1,7 @@
 const Room = require('../models/Room.model')
 const House = require('../models/House.model')
 const Service = require('../models/Services.model')
+const Customer = require('../models/Customer.model')
 const mongoose = require('mongoose')
 
 
@@ -88,6 +89,9 @@ exports.deleteRoom = async (req, res) => {
 exports.addPersonToRoom = async (req, res) => {
     try {
         const room = await Room.findById(req.params.roomId)
+        const customer = await Customer.findById(req.params.customerId)
+        customer.RoomId = room._id
+        customer.save()
         if(room.ListPerson.Length === 0 )
         {
             room.Status = 1
@@ -106,6 +110,9 @@ exports.removePersonToRoom = async (req, res) => {
         const room = await Room.findById(req.params.roomId)
         const pos =  room.ListPerson.indexOf(req.params.customerId)
         room.ListPerson.splice(pos, 1)
+        const customer = await Customer.findById(req.params.customerId)
+        customer.RoomId = ""
+        customer.save()
         const result = await room.save()
         res.json(result)
     } catch (error) {

@@ -14,6 +14,10 @@ const customerSchema = mongoose.Schema({
         type: String,
         require: true
     },
+    RoomId:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Room"
+    },
     Cmnd: { type: String, require: true},
     DateCmnd: { type: Date},
     PlaceCmnd: {type: String},
