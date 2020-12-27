@@ -11,7 +11,7 @@ exports.createRoom = async (req, res) => {
         Width: req.body.Width,
         Price: req.body.Price,
         Details: req.body.Details,
-        Image: req.body.Image,
+        Image: req.file.path,
         HouseId: req.body.HouseId,
         Status: 0
     })

@@ -34,7 +34,7 @@ exports.getServiceById = async(req,res)=>{
 }
 exports.getServiceOfUser = async(req, res) =>{
     try{
-        const service = await Service.find({UserId: req.params.userId})
+        const service = await Service.find({UserId: req.jwt.UserId})
         res.json(service)
     }catch(err){
         res.json({message: err})
