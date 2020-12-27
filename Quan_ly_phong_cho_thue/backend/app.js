@@ -5,7 +5,7 @@ const cors = require("cors");
 const config = require("./config/config")
 const fs = require('fs');
 const path = require('path');
-const Service = require('./controller/services.controller')
+const UserController = require('./controller/user.controller')
 //Start App
 const User = require("./models/User.model")
 const app = express();
@@ -62,7 +62,7 @@ app.use("/verify",  async (req,res)  =>  {
         {
           checkuser.Status = 1;
           await checkuser.save();
-          Service.createService(checkuser["_id"])
+          UserController.initService(checkuser["_id"])
           return res.redirect("http://localhost:3000/verify")
         }
         else{

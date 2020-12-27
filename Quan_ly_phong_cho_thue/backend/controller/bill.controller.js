@@ -1,10 +1,14 @@
 const Bill = require('../models/Bill.model')
 const Room = require('../models/Room.model')
+const House = require('../models/House.model')
 const UtilityBill = require('../models/Utilitybills.model')
 
 const today = new Date()
 const prevmonth = new Date()
 prevmonth.setMonth(prevmonth.getMonth() - 1)
+
+
+
 exports.createBill = async (req, res) => {
     try {
 
@@ -36,6 +40,7 @@ exports.createBill = async (req, res) => {
                 currUl = listUl[index]
             }
         }
+       
         //lấy hóa đơn điện nước của tháng trước
         var prevUl
         for (const index in listUl) {
@@ -43,6 +48,7 @@ exports.createBill = async (req, res) => {
                 prevUl = listUl[index]
             }
         }
+       
         //tính tiền dựa vào dịch vụ của phòng
         for (const sv in room.ListService) {
             let str = String(clearVNSign(room.ListService[sv]["ServiceName"])).toLowerCase()
@@ -60,7 +66,8 @@ exports.createBill = async (req, res) => {
         }
         bill.TotalBill += bill.ElectricFee + bill.WaterFee + bill.RoomPrice
         const result = await bill.save()
-
+        room.ListBill.push(result["_id"])
+        room.save()
         res.json(bill)
 
     } catch (err) {
@@ -106,6 +113,32 @@ exports.getBillInMonth = async (req, res) => {
         const ListBill = await Bill.find({ StartDate: month })
         
         res.json(ListBill)
+    } catch (error) {
+        res.json({ message: error.message })
+    }
+}
+exports.getBillInMonthOfUser = async (req, res) => {
+    console.log(req.query)
+    try {
+        if(req.body.Month)
+        {
+            const list = await House.find({UserId: req.query.UserId, _id: req.query.HouseId})
+            .populate({
+                path: 'Rooms',
+                populate: { path: 'ListBill', match: { StartDate: req.body.Month }
+              }})
+              return   res.json(list)
+        }
+            const month = new Date(today.getFullYear(), today.getMonth())
+            const list = await House.find({ _id: req.query.HouseId , UserId: req.query.UserId})
+            .populate({
+                path: 'Rooms',
+                populate: { path: 'ListBill', match: { StartDate: month }
+              }})
+            console.log(list)
+            res.json(list)
+        
+      
     } catch (error) {
         res.json({ message: error.message })
     }

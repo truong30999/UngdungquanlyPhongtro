@@ -6,7 +6,7 @@ const crypto = require('crypto');
 exports.isPasswordAndUserMatch = (req, res, next) => {
     User.findOne({ Email: req.body.Email })
         .then((user) => {
-            if (!user) {
+            if (!user || user.Status === 0) {
                 res.status(404).send({ errors: "User not found" });
             } else {
                 let passwordFields = user.PassWord.split('$');

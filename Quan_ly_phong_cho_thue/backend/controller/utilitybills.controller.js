@@ -1,5 +1,5 @@
 const UtilityBill = require('../models/Utilitybills.model')
-
+const Room = require('../models/Room.model')
 exports.createUtilityBills = async(req, res) => {
     try{
         
@@ -23,6 +23,35 @@ exports.createUtilityBills = async(req, res) => {
 exports.getAllUtilityBills = async (req, res) =>{
     try{
         const ult = await UtilityBill.find()
+        res.json(ult)
+
+    }catch (err) {
+        res.json({ message: err})
+    }
+
+}
+exports.getAllUtilityByRoom = async (req, res) =>{
+    try{
+        //const ult = await UtilityBill.find({RoomId : req.query.roomId})
+        console.log(req.query.RoomId)
+        const ult = await UtilityBill.aggregate([
+            {
+                $match: { 
+                    RoomId: req.query.RoomId
+                } 
+            },
+            // {
+            //     $lookup:{
+            //         from: 'rooms',
+            //         localField: 'RoomId',
+            //         foreignField: '_id',
+            //         as: 'abc'
+                    
+            //     }
+            // }
+        ])
+        console.log(ult)
+        
         res.json(ult)
 
     }catch (err) {

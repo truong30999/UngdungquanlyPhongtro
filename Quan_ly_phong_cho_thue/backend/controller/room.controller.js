@@ -155,6 +155,22 @@ exports.getServideOfRoom = async(req,res)=>{
         res.json({message: error.message})
     }
 }
+
+exports.getUtilityBillOfRoom = async(req, res)=>{
+    try {
+        const house = await House.findOne({_id : req.params.houseId}).populate({
+            path: 'Rooms',
+            populate: { path: '' }
+          });
+        res.json(service)
+
+
+    } catch (error) {
+        res.json({message: error.message})
+    }
+
+}
+
 exports.getEmptyRoom = async(req,res)=>{
     try {
         const room = await Room.find({ Status : 1})
