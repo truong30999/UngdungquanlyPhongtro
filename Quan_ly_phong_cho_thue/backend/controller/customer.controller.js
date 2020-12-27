@@ -1,4 +1,5 @@
 const Customer = require('../models/Customer.model')
+const House = require('../models/House.model')
 const fs = require('fs');
 exports.createCustomer = async (req, res, next) => {
     try {
@@ -22,10 +23,14 @@ exports.createCustomer = async (req, res, next) => {
 
 }
 
-exports.getAllCustomer = async (req, res) => {
+exports.getAllCustomerOfUser = async (req, res) => {
     try {
-        const customer = await Customer.find();
-        res.json(customer);
+        const list = await House.find({_id: req.jwt.userId}).populate({
+            path: 'Rooms',
+            populate: { path: 'ListPerson' }
+        })
+        
+        res.json(list);
     } catch (err) {
         res.json({ message: err });
     }
