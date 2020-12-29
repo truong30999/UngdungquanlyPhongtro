@@ -27,7 +27,7 @@ router.patch('/:roomId/addCustomer/:customerId', Room.addPersonToRoom)
 
 router.patch('/:roomId/removeCustomer/:customerId', Room.removePersonToRoom)
 
-router.patch('/:roomId', Room.updateRoom)
+router.patch('/:roomId',fileUpload.single('Image'), Room.updateRoom)
 
 router.delete('/:roomId', Room.deleteRoom)
 
