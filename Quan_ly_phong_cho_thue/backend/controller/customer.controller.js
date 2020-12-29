@@ -26,11 +26,8 @@ exports.createCustomer = async (req, res, next) => {
 
 exports.getAllCustomerOfUser = async (req, res) => {
     try {
-        const list = await House.find({_id: req.jwt.userId}).populate({
-            path: 'Rooms',
-            populate: { path: 'ListPerson' }
-        })
-        
+        const list = await Customer.find({UserId: req.jwt.userId})
+
         res.json(list);
     } catch (err) {
         res.json({ message: err });
