@@ -21,8 +21,11 @@ const customerSchema = mongoose.Schema({
     Cmnd: { type: String, require: true},
     DateCmnd: { type: Date},
     PlaceCmnd: {type: String},
-    Image : { type: String}
-    
+    Image : { type: String},
+    UserId: { 
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Users"
+    }
 });
 
 module.exports= mongoose.model("Customers", customerSchema);

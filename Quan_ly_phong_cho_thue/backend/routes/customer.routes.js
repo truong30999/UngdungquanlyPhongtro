@@ -6,7 +6,7 @@ const auth = require("../controller/auth.controller")
 
 
 router.get('/',auth.validJWTNeeded, customer.getAllCustomerOfUser)
-router.post('/',fileUpload.single('Image'), customer.createCustomer)
+router.post('/',auth.validJWTNeeded,fileUpload.single('Image'), customer.createCustomer)
 router.get('/:customerId', customer.getCustomerById)
 router.patch('/:customerId',fileUpload.single('Image'), customer.updateCustomer)
 router.delete('/:customerId', customer.deleteCustomer)

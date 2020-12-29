@@ -13,7 +13,8 @@ exports.createCustomer = async (req, res, next) => {
             Cmnd: req.body.Cmnd,
             DateCmnd: req.body.DateCmnd,
             PlaceCmnd: req.body.PlaceCmnd,
-            Image: req.file.path
+            Image: req.file.path,
+            UserId : req.jwt.userId
         })
         let result = await customer.save()
         res.json(result)
