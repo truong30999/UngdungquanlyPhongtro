@@ -178,39 +178,18 @@ exports.getServideOfRoom = async(req,res)=>{
     }
 }
 
-// exports.getUtilityBillOfRoom = async(req, res)=>{
-//     try {
-//         const house = await House.findOne({_id : req.params.houseId}).populate({
-//             path: 'Rooms',
-//             populate: { path: '' }
-//           });
-//         res.json(service)
-
-
-//     } catch (error) {
-//         res.json({message: error.message})
-//     }
-
-// }
-
 exports.getEmptyRoom = async(req,res)=>{
     try {
-        const room = await Room.find({ Status : 1})
-        
+        const room = await Room.find({ UserId : req.jwt.userId, Status : 0})   
         res.json(room)
-
-
     } catch (error) {
         res.json({message: error.message})
     }
 }
 exports.getNotEmptyRoom = async(req,res)=>{
     try {
-        const room = await Room.find({ Status : 0})
-        
+        const room = await Room.find({ UserId : req.jwt.userId, Status : 1})
         res.json(room)
-
-
     } catch (error) {
         res.json({message: error.message})
     }

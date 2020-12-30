@@ -6,8 +6,8 @@ const fileUpload = require('../middleware/file-upload.js')
 
 
 router.get('/', Room.getAllRoom)
-router.get('/emptyRoom', Room.getEmptyRoom)
-router.get('/notemptyRoom', Room.getNotEmptyRoom)
+router.get('/emptyRoom',auth.validJWTNeeded, Room.getEmptyRoom)
+router.get('/notemptyRoom', auth.validJWTNeeded, Room.getNotEmptyRoom)
 
 router.get('/:roomId', Room.getRoomById)
 
