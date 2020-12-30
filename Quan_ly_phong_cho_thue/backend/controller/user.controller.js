@@ -99,7 +99,7 @@ exports.getAllUser = async (req, res) => {
 }
 exports.getUserById = async (req, res) => {
     try {
-        const user = await User.findById(req.params.userId);
+        const user = await User.findById(req.jwt.userId);
         res.json(user);
     } catch (err) {
         res.json({ message: err.message });
