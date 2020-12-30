@@ -74,6 +74,10 @@ exports.deleteCustomer = async (req, res) => {
     const room = await Room.findById(customer.RoomId)
     const pos =  room.ListPerson.indexOf(req.params.customerId)
     room.ListPerson.splice(pos, 1)  
+    if(room.ListPerson.length === 0 )
+    {
+        room.Status = 0
+    }
     await room.save()
     if(customer.Image){
         fs.unlink(customer.Image, err => {

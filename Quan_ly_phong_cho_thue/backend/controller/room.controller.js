@@ -116,9 +116,13 @@ exports.removePersonToRoom = async (req, res) => {
         const room = await Room.findById(req.params.roomId)
         const pos =  room.ListPerson.indexOf(req.params.customerId)
         room.ListPerson.splice(pos, 1)
+        if(room.ListPerson.length === 0 )
+        {
+            room.Status = 0
+        }
         const customer = await Customer.findById(req.params.customerId)
         customer.RoomId = ""
-        customer.save()
+        await customer.save()
         const result = await room.save()
         res.json(result)
     } catch (error) {
