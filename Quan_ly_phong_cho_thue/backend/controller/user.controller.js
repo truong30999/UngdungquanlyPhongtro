@@ -5,6 +5,7 @@ const fs = require('fs');
 const  nodemailer = require('nodemailer');
 
 
+
 exports.createUser = async (req, res, next) => {
     let salt = crypto.randomBytes(16).toString('base64');
     let hash = crypto.createHmac('sha512', salt)
@@ -181,6 +182,30 @@ exports.initService = async (userId) => {
     await service1.save()
     await service2.save()
     await service3.save()
+}
+exports.changePassWord = async(req, res)=>{
+    try {
+        const user = await User.findById(req.jwt.userId)
+        let passwordFields = user.PassWord.split('$');
+        let salt = passwordFields[0];
+        let hash = crypto.createHmac('sha512', salt).update(String(req.body.currentPassWord)).digest("base64");
+        if (hash === passwordFields[1]) {
+            salt = crypto.randomBytes(16).toString('base64');
+            hash = crypto.createHmac('sha512', salt)
+                .update(req.body.newPassWord)
+                .digest("base64");
+            req.body.newPassWord = salt + "$" + hash;
+            user.PassWord = req.body.newPassWord
+            const result =  await user.save()
+            res.json(result)
+        }
+        else{
+            return res.json({err : "Vui lòng nhập lại mật khẩu"})
+        }
+
+    } catch (err) {
+       res.json({err: err.message})
+    }
 }
 const getRandomInt = (min, max) => {
     return Math.floor(Math.random() * (max - min)) + min;
