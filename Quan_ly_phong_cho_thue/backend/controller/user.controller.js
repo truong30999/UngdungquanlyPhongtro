@@ -118,12 +118,12 @@ exports.getUserAuth = async (req, res) => {
     }
 }
 exports.updateUser = async (req, res) => {
-    if (req.body.password) {
-        let salt = crypto.randomBytes(16).toString('base64');
-        let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest("base64");
-        req.body.password = salt + "$" + hash;
-    }
-    const user = await User.findById(req.params.userId)
+    // if (req.body.password) {
+    //     let salt = crypto.randomBytes(16).toString('base64');
+    //     let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest("base64");
+    //     req.body.password = salt + "$" + hash;
+    // }
+    const user = await User.findById(req.jwt.userId)
     if (user.Image && req.file) {
         fs.unlink(user.Image, err => {
             console.log(err.message);
