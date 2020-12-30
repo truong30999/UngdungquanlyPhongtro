@@ -2,7 +2,7 @@ const Room = require('../models/Room.model')
 const House = require('../models/House.model')
 const Service = require('../models/Services.model')
 const Customer = require('../models/Customer.model')
-const mongoose = require('mongoose')
+
 
 
 exports.createRoom = async (req, res) => {
@@ -180,16 +180,34 @@ exports.getServideOfRoom = async(req,res)=>{
 
 exports.getEmptyRoom = async(req,res)=>{
     try {
-        const room = await Room.find({ UserId : req.jwt.userId, Status : 0})   
-        res.json(room)
+        const house = await House.find({UserId: req.jwt.userId})
+        .populate({
+            path: 'Rooms',
+            match: { Status: 0 }
+          })
+          let roomNumber = 0;
+          house.forEach(h=>{
+              roomNumber +=  h.Rooms.length
+             
+          })
+        res.json(roomNumber)
     } catch (error) {
         res.json({message: error.message})
     }
 }
 exports.getNotEmptyRoom = async(req,res)=>{
     try {
-        const room = await Room.find({ UserId : req.jwt.userId, Status : 1})
-        res.json(room)
+        const house = await House.find({UserId: req.jwt.userId})
+        .populate({
+            path: 'Rooms',
+            match: { Status: 1 }
+          })
+          let roomNumber = 0;
+          house.forEach(h=>{
+              roomNumber +=  h.Rooms.length
+             
+          })
+        res.json(roomNumber)
     } catch (error) {
         res.json({message: error.message})
     }
