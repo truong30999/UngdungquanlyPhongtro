@@ -135,7 +135,7 @@ exports.updateUser = async (req, res) => {
     try {
 
         const updatedUser = await User.updateOne(
-            { _id: req.params.userId },
+            { _id: req.jwt.userId },
             { $set: update }
 
         );
