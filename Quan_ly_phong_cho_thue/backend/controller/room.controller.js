@@ -98,7 +98,7 @@ exports.addPersonToRoom = async (req, res) => {
         const customer = await Customer.findById(req.params.customerId)
         customer.RoomId = room._id
         customer.save()
-        if(room.ListPerson.Length === 0 )
+        if(room.ListPerson.length === 0 )
         {
             room.Status = 1
         }

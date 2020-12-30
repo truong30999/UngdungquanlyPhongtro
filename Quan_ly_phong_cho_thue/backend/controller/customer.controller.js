@@ -1,5 +1,5 @@
 const Customer = require('../models/Customer.model')
-const House = require('../models/House.model')
+const Room = require('../models/Room.model')
 const fs = require('fs');
 exports.createCustomer = async (req, res, next) => {
     try {
@@ -71,6 +71,10 @@ exports.updateCustomer = async (req, res) => {
 }
 exports.deleteCustomer = async (req, res) => {
     const customer = await Customer.findById( req.params.customerId)
+    const room = await Room.findById(customer.RoomId)
+    const pos =  room.ListPerson.indexOf(req.params.customerId)
+    room.ListPerson.splice(pos, 1)  
+    await room.save()
     if(customer.Image){
         fs.unlink(customer.Image, err => {
             console.log(err);

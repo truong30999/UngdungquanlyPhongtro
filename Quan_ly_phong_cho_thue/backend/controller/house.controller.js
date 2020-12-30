@@ -65,7 +65,7 @@ exports.deleteHouse = async (req,res) =>{
         const user = await User.findById(house.UserId)
         const pos =  user.House.indexOf(req.params.houseId)
         user.House.splice(pos,1)
-        user.save()
+        await user.save()
         const removeHouse = await House.remove({_id : req.params.houseId})
         res.json(removeHouse)
     }
