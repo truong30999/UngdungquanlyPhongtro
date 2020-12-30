@@ -94,9 +94,15 @@ exports.deleteRoom = async (req, res) => {
 //them mot nguoi vao phong
 exports.addPersonToRoom = async (req, res) => {
     try {
+        
         const room = await Room.findById(req.params.roomId)
         const customer = await Customer.findById(req.params.customerId)
-        customer.RoomId = room._id
+        if(customer.RoomId === "" || !customer.RoomId){
+            customer.RoomId = room._id
+        }
+        else{
+            return res.json({ err: "Người dùng đã được thêm vào phòng" })
+        }
         customer.save()
         if(room.ListPerson.length === 0 )
         {
@@ -180,6 +186,7 @@ exports.getServideOfRoom = async(req,res)=>{
 
 exports.getEmptyRoom = async(req,res)=>{
     try {
+        
         const house = await House.find({UserId: req.jwt.userId})
         .populate({
             path: 'Rooms',
@@ -188,9 +195,8 @@ exports.getEmptyRoom = async(req,res)=>{
           let roomNumber = 0;
           house.forEach(h=>{
               roomNumber +=  h.Rooms.length
-             
           })
-        res.json(roomNumber)
+        res.json({ AmountOfRoom: roomNumber})
     } catch (error) {
         res.json({message: error.message})
     }
@@ -205,9 +211,8 @@ exports.getNotEmptyRoom = async(req,res)=>{
           let roomNumber = 0;
           house.forEach(h=>{
               roomNumber +=  h.Rooms.length
-             
           })
-        res.json(roomNumber)
+        res.json({ AmountOfRoom: roomNumber})
     } catch (error) {
         res.json({message: error.message})
     }
