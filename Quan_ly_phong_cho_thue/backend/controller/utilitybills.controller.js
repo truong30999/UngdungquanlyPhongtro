@@ -13,8 +13,8 @@ exports.createUtilityBills = async(req, res) => {
     })
     const result = await ult.save()
     const room = await Room.findById(req.body.RoomId)
-    room.ListUtilityBill.push(result[_id])
-    room.save()
+    room.ListUtilityBill.push(result["_id"])
+    await room.save()
     res.json(result)
         
 
@@ -39,15 +39,16 @@ exports.getAllUtilityByRoom = async (req, res) =>{
     try {
         if(req.query.Month)
         {
-            const list = await House.find({UserId: req.query.UserId, _id: req.query.HouseId})
+            const list = await House.find({UserId: req.jwt.userId, _id: req.query.HouseId})
             .populate({
                 path: 'Rooms',
                 populate: { path: 'ListUtilityBill', match: { Time: req.query.Month }
               }})
               return   res.json(list)
         }
+        
             const month = new Date(today.getFullYear(), today.getMonth())
-            const list = await House.find({ _id: req.query.HouseId , UserId: req.query.UserId})
+            const list = await House.find({ _id: req.query.HouseId , UserId: req.jwt.userId})
             .populate({
                 path: 'Rooms',
                 populate: { path: 'ListUtilityBill', match: { Time: month }
@@ -88,7 +89,7 @@ exports.delete = async (req, res) => {
         const room = await Room.findById(utl.RoomId)
         const pos =  room.ListUtilityBill.indexOf(req.params.Id)
         room.ListUtilityBill.splice(pos,1)
-        room.save()
+        await room.save()
         const result =  await UtilityBill.remove({ _id:req.params.Id})
 
         res.json(result)
