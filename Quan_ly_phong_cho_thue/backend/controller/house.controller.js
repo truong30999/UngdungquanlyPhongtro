@@ -14,7 +14,7 @@ exports.createHouse = async (req, res) => {
        
         const createHouse = await house.save()
         const user = await User.findById({_id: house.UserId})
-        await user.House.push(createHouse["_id"])
+         user.House.push(createHouse["_id"])
         await user.save()
         res.json(createHouse)
     }catch(err)
