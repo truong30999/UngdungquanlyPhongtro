@@ -40,23 +40,24 @@ exports.getAllUtilityBills = async (req, res) =>{
 exports.getAllUtilityByRoom = async (req, res) =>{
     try {
         
-        if(req.query.Month)
-        {
+        
+            const time = new Date( req.query.Month)
+            const abc =  new Date(time.getFullYear(), time.getMonth())
             const list = await House.find({UserId: req.jwt.userId, _id: req.query.HouseId})
             .populate({
                 path: 'Rooms',
-                populate: { path: 'ListUtilityBill', match: { Time: req.query.Month }
-              }})
-              return   res.json(list)
-        }
-        
-            const month =  new Date(today.getFullYear(), today.getMonth())
-            const list = await House.find({ _id: req.query.HouseId , UserId: req.jwt.userId})
-            .populate({
-                path: 'Rooms',
-                populate: { path: 'ListUtilityBill', match: { Time: month }
+                populate: { path: 'ListUtilityBill', match: { Time:abc }
               }})
             res.json(list)
+        
+        
+            // const month =  new Date(today.getFullYear(), today.getMonth())
+            // const list = await House.find({ _id: req.query.HouseId , UserId: req.jwt.userId})
+            // .populate({
+            //     path: 'Rooms',
+            //     populate: { path: 'ListUtilityBill', match: { Time: month }
+            //   }})
+            // res.json(list)
         
       
     } catch (error) {
