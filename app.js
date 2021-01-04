@@ -78,7 +78,6 @@ app.get('/',(req,res) => {
 });
 //connect to db
 
-mongoose.connect('mongodb://localhost:27017/test1',{ useNewUrlParser: true ,useUnifiedTopology: true }, () => console.log("connect to db success"));
-
+mongoose.connect('mongodb+srv://truong:Khang250904@cluster0.xlqnr.mongodb.net/test1?retryWrites=true&w=majority',{ useNewUrlParser: true ,useUnifiedTopology: true }, () => console.log("connect to db success"));
 // Launch app to the specified port
 app.listen(config.port);
