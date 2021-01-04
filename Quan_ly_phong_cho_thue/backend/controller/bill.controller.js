@@ -139,7 +139,6 @@ exports.getBillInMonthOfUser = async (req, res) => {
                 path: 'Rooms',
                 populate: { path: 'ListBill', match: { StartDate: month }
               }})
-            console.log(list)
             res.json(list)
         
       
