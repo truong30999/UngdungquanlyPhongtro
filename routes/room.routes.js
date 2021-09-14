@@ -17,7 +17,7 @@ router.get('/person/:roomId', Room.getPersonInRoom)
 
 router.get('/service/:roomId', Room.getServideOfRoom)
 
-router.post('/',auth.validJWTNeeded,fileUpload.single('Image'), Room.createRoom)
+router.post('/',auth.validJWTNeeded,fileUpload.array('Image'), Room.createRoom)
 
 router.patch('/:roomId/addService/:serviceId',Room.addServiceToRoom)
 

@@ -2,21 +2,22 @@ const Room = require('../models/Room.model')
 const House = require('../models/House.model')
 const Service = require('../models/Services.model')
 const Customer = require('../models/Customer.model')
-
-
+const config = require('../config/config')
+const common = require('../utility/common')
 
 exports.createRoom = async (req, res) => {
+    let imgArr= common.convertArrImage(req.files)
+    console.log(imgArr)
     const room = new Room({
         RoomNumber: req.body.RoomNumber,
         Length: req.body.Length,
         Width: req.body.Width,
         Price: req.body.Price,
         Details: req.body.Details,
-        Image: req.file.path,
+        Image: imgArr,
         HouseId: req.body.HouseId,
         Status: 0
-    })
-
+    })   
     try {
         const service = await Service.find({ UserId: req.jwt.userId }, { _id: 1 })
 
