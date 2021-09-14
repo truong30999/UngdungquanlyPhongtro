@@ -24,7 +24,7 @@ const roomSchema = mongoose.Schema({
         type: String
     },
     Image: {
-        type: String
+        type: Array
     },
     ListPerson: [{
         type: mongoose.Schema.Types.ObjectId,
